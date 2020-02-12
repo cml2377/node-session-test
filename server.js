@@ -1,21 +1,13 @@
 const express = require('express')
-const path = require('path')
+const app = express();
+const APIRoutes = require('./routes/api-routes')
+const HTMLRoutes = require('./routes/html-routes')
+const DB = require('./lib/db')
 const port = 3000;
 
-const app = express();
+app.use('/api', APIRoutes)
+app.use('/', HTMLRoutes)
 
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/login.html'))
+DB.connect(() => {
+    app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 })
-
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname+'/public/signup.html'))
-})
-
-app.post('/login', (req, res) => {
-
-})
-
-app.get('/', (req, res) => res.redirect('/login'))
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
