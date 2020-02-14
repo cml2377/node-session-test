@@ -32,6 +32,8 @@ router.post('/login', (req, res) => {
             })
         }
         if (user.password == req.body.password) {
+            req.session.user = user
+            req.session.visits = 0
             res.redirect('/home')
         } else {
             res.status(401).json({
