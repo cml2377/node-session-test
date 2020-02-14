@@ -16,14 +16,13 @@ router.get('/signup', (req, res) => {
 })
 
 router.get('/logout', (req, res) => {
-    //TODO: unset session
     return res.redirect('/login')
 })
 
 router.get('/home', (req, res) => {
     res.send(homeTemplate({
-        name: req.session.name || 'who are you????',
-        email: req.session.email || 'i dont know'
+        name: req.session ? req.session.name : 'WHO ARE YOU????',
+        email: req.session ? req.session.email : 'I DONT KNOW'
     }))
 })
 
