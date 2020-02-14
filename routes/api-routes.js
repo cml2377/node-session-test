@@ -2,6 +2,12 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 
+
+function setSession(req, user) {
+    req.session.user = user
+    req.session.visits = 0
+}
+
 /**
  * /api/signup POST
  */
@@ -16,6 +22,7 @@ router.post('/signup', async (req, res) => {
     } catch (error) {
         return res.json(error)
     }
+    setSession(req, user)
     res.redirect('/home')
 })
 
@@ -32,8 +39,7 @@ router.post('/login', (req, res) => {
             })
         }
         if (user.password == req.body.password) {
-            req.session.user = user
-            req.session.visits = 0
+            setSession(req, user)
             res.redirect('/home')
         } else {
             res.status(401).json({
