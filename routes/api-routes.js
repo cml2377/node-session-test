@@ -29,24 +29,25 @@ router.post('/signup', async (req, res) => {
 /**
  * /api/login POST
  */
-router.post('/login', (req, res) => {
-    User.findOne({
-        email: req.body.email
-    }, (err, user) => {
-        if (err || user == null) {
-            res.status(401).json({
-                error: 'Invalid username or password'
-            })
-        }
-        if (user.password == req.body.password) {
-            setSession(req, user)
-            res.redirect('/home')
-        } else {
-            res.status(401).json({
-                error: 'Invalid username or password'
-            })
-        }
-    })
+router.post('/login', async (req, res) => {
+    try {
+        var user = await User.findOne({
+            email: req.body.email
+        }).exec()
+    } catch (error) {
+        return res.status(401).json({
+            error: 'Invalid username or password'
+        })
+    }
+
+    if (user && user.password == req.body.password) {
+        setSession(req, user)
+        res.redirect('/home')
+    } else {
+        res.status(401).json({
+            error: 'Invalid username or password'
+        })
+    }
 })
 
 module.exports = router
