@@ -4,6 +4,7 @@ const User = require('../models/user')
 
 
 function setSession(req, user) {
+    // lets server know who the user is.
     req.session.user = user
     req.session.visits = 0
 }
